@@ -73,7 +73,7 @@ class TexTree{
 			System.out.printf("             \\begin  \\end\n");
 			System.out.println("---------------------------------------------------------");
 			for(int n = 0; n < nameTable.length; n++){
-				if(!nameTable[n].name.equals("noname")){
+				if(nameTable[n].name != null){
 					System.out.printf("%-12s:  %3d    %3d\n", nameTable[n].name, nameTable[n].val_begin, nameTable[n].val_end);
 				}
 			}
@@ -107,7 +107,7 @@ class TexTree{
 	
 	static int registTable(String newName){
 		for(int i = 0; i < nameTable.length; i++){
-			if(nameTable[i].name.equals("noname")){
+			if(nameTable[i].name == null){
 				nameTable[i].name = newName;
 				return i;
 			}
@@ -129,7 +129,7 @@ class TexTree{
 
 
 class NameAndVal{
-	String name = "noname";
+	String name;
 	int val_begin;
 	int val_end;
 }
