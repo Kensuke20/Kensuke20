@@ -1,16 +1,18 @@
 import java.io.*;
 class TexTree{
 	public static final int MAX_STORE = 20;
+	
 	public static NameAndVal[] nameTable = new NameAndVal[MAX_STORE];
 
 	public static void main(String[] args){
 		
 		String s, new_s;
-		int tmp, count = 0, tableNum;
+		int tmp, count_layer = 0, line_count = 0, tableNum;
 		Stack stack = new Stack();
 		SNode top = new SNode();
 		
 		top = stack.StackCreate();
+		
 		
 		for(int i = 0; i < nameTable.length; i++){
 			nameTable[i] = new NameAndVal();
@@ -21,53 +23,61 @@ class TexTree{
 			BufferedReader fin = new BufferedReader(new FileReader(args[0]));
 			
 			while((s = fin.readLine()) != null){
+				line_count++;
 				tmp = s.indexOf("\\begin");
 				if(tmp != -1){
-					/////////////////////////////////////////////////
 					
-					count++;
-					stack.push(top, count);
-					insertTab(count, 0);
-					System.out.println(count + ": " + s.substring(tmp));
-					insertTab(count + 1, 1);
 					
-					/////////////////////////////////////////////////
+					count_layer++;
+					stack.push(top, count_layer);
+					insertTab(count_layer, 0);
+					System.out.println(count_layer + ": " + s.substring(tmp) + "  L." + line_count);
+					insertTab(count_layer + 1, 1);
+					
+					
 					
 					new_s = cutOutChar(s);
 					tableNum = checkTable(new_s);
 					if(tableNum < 0){
+						
 						tableNum = registTable(new_s);
 						nameTable[tableNum].val_begin++;
 					}
 					else{
+						
 						nameTable[tableNum].val_begin++;
 					}
-					///////////////////////////////////////////////////
+					
 				}
 				
 				tmp = s.indexOf("\\end");
 				if(tmp != -1){
-					/////////////////////////////////////////////////
-					insertTab(count, 0);
-					System.out.println(stack.pop(top) + ": " + s.substring(tmp));
-					insertTab(count, 1);
-					count--;
 					
-					/////////////////////////////////////////////////
+					
+					insertTab(count_layer, 0);
+					System.out.println(stack.pop(top) + ": " + s.substring(tmp) + "  L." + line_count);
+					insertTab(count_layer, 1);
+					count_layer--;
+					
+					
+					
 					new_s = cutOutChar(s);
 					tableNum = checkTable(new_s);
 					if(tableNum < 0){
+						
 						tableNum = registTable(new_s);
 						nameTable[tableNum].val_end++;
 
 					}
 					else{
+						
 						nameTable[tableNum].val_end++;
 					}
-					///////////////////////////////////////////////////
+					
 				}
 			}
 			fin.close();
+			
 			
 			System.out.println("---------------------------------------------------------");
 			System.out.printf("             \\begin  \\end\n");
@@ -92,7 +102,7 @@ class TexTree{
 		b = input_s.indexOf('}');
 		output_s = input_s.substring(a + 1, b);
 		
-//		System.out.println(output_s + "  This is name.");
+
 		return output_s;
 	}
 	
@@ -126,6 +136,11 @@ class TexTree{
 		}
 	}
 }
+
+
+
+
+
 
 
 class NameAndVal{
